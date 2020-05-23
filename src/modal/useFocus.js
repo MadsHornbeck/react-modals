@@ -1,30 +1,7 @@
 import React from "react";
-
-// TODO: maybe find a better structure for the keys
-export function useCloseOnKeys(resolve, keys) {
-  React.useEffect(() => {
-    // TODO: only do this in dev
-    if (!keys || !keys.length) {
-      console.warn("Warn dev about no keys passed");
-    }
-
-    function handleKeyDown(e) {
-      const k = keys.find((k) => k === e.key || k[0] === e.key);
-      if (k) {
-        const a = Array.isArray(k) ? k[1] : undefined;
-        resolve(typeof a === "function" ? a() : a);
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [keys, resolve]);
-}
-
 // TODO: handle parameters better
-export function useFocus(ref, autoFocus = true) {
+export default function useFocus(ref, autoFocus = true) {
+  const returnFocus = React.useRef(document.activeElement);
   React.useEffect(() => {
     if (autoFocus && ref.current) {
       findFirstTabable(ref.current).focus();
@@ -34,6 +11,7 @@ export function useFocus(ref, autoFocus = true) {
   React.useEffect(() => {
     if (!ref.current) return;
 
+    // TODO: handle backwards tab (shift + tab)
     function handleFocus() {
       if (ref.current.contains(document.activeElement)) return;
       findFirstTabable(ref.current).focus();
@@ -42,8 +20,10 @@ export function useFocus(ref, autoFocus = true) {
     document.addEventListener("focus", handleFocus, true);
     return () => {
       document.removeEventListener("focus", handleFocus, true);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      if (returnFocus.current) returnFocus.current.focus();
     };
-  }, [ref]);
+  }, [ref, returnFocus]);
 }
 
 function findFirstTabable(element) {

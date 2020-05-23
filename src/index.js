@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { ModalProvider } from "./modals";
+import { ModalProvider } from "./modal";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ModalProvider>
+    <ModalProvider portal={document.body}>
       <App />
     </ModalProvider>
   </React.StrictMode>,

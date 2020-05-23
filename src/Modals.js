@@ -1,55 +1,56 @@
 import React from "react";
-import { useFocus, useCloseOnKeys } from "./util";
-import { useModal } from "./modals";
+import { useOpenModal, useModal, useAria } from "./modal";
+import "./Modal.css";
 
-function Modal({ children, handleClose, resolve }) {
-  const ref = React.useRef();
-  useFocus(ref);
-  useCloseOnKeys(resolve, [
-    [
-      "Escape",
-      () =>
-        new Promise((r) => {
-          setTimeout(() => r("FISK"), 1000);
-        }),
-    ],
-    ["Enter", true],
-    "Shift",
-  ]);
-  const [a, s] = React.useState(true);
+const closeOnkeys = [
+  "Escape",
+  [
+    "e",
+    () => {
+      console.log("Closing in 1 second");
+      return new Promise((r) => {
+        setTimeout(() => r("FISK"), 1000);
+      });
+    },
+  ],
+  ["q", true],
+];
+
+function Modal({ children, handleClose, resolve, aria }) {
+  const ref = useModal({ resolve, closeOnkeys });
   return (
-    <div ref={ref} className="modal">
+    <div className="modal">
       <div className="overlay" onClick={handleClose}></div>
-      <div className="content">
-        <button onClick={() => s((e) => !e)}>OST {`${a}`}</button>
-        <div tabIndex="0">TAB</div>
-        <div tabIndex="asdf">No TAB</div>
-        <a href="#">Anchor</a>
+      <div className="content" ref={ref} role="dialog" {...aria.attributes}>
         {children}
       </div>
     </div>
   );
 }
 
-export function Alert({ resolve, text }) {
+function Alert({ resolve, text }) {
+  const aria = useAria("Label");
   return (
-    <Modal resolve={resolve} handleClose={() => resolve()}>
-      <div>
-        {text}
+    <Modal aria={aria} resolve={resolve} handleClose={() => resolve()}>
+      <div style={{ height: "100vh" }}>
+        <h3 id={aria.labelledby}>Title</h3>
+        <p>{text}</p>
         <button onClick={resolve}>Okay</button>
       </div>
     </Modal>
   );
 }
+export const useAlert = (text) => useOpenModal(<Alert text={text} />);
 
-export function Confirm({ resolve, text }) {
+function Confirm({ resolve, text }) {
+  const aria = useAria("Label");
   return (
-    <Modal resolve={resolve} handleClose={() => resolve(false)}>
-      <div>
-        {text}
-        <button onClick={() => resolve(true)}>Okay</button>
-        <button onClick={() => resolve(false)}>Cancel</button>
-      </div>
+    <Modal aria={aria} resolve={resolve} handleClose={() => resolve(false)}>
+      <p>{text}</p>
+      <button onClick={() => resolve(true)}>Okay</button>
+      <button onClick={() => resolve(false)}>Cancel</button>
     </Modal>
   );
 }
+
+export const useConfirm = (text) => useOpenModal(<Confirm text={text} />);

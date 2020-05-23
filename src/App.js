@@ -1,60 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { useModal } from "./modals";
+import { useAlert, useConfirm } from "./Modals";
 
 function App() {
-  const alert = useModal(<Alert text="fisk" />);
+  const alert = useAlert("This is an alert");
 
-  const qwer = useModal(<Alert text="qwer" />);
+  const alert2 = useAlert("This is also an alert!");
 
-  const zxcv = useModal(<Cheese />);
+  const confirm = useConfirm("Do you want to confirm this?");
   const asdf = () => {
-    zxcv().then((asdf) => {
-      console.log(asdf);
-    });
+    confirm({ text: "This is a different text!" }).then(console.log);
   };
 
   return (
-    <div className="App">
+    <div className="App" style={{ height: "200vh" }}>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
         <button onClick={alert}>Whoop</button>
         <button onClick={asdf}>Asdf</button>
-        <button onClick={() => qwer({ text: "henning" })}>qwer</button>
+        <button onClick={() => alert2({ text: "henning" })}>Qwer</button>
       </header>
     </div>
   );
 }
 
 export default App;
-
-function Alert({ resolve, text }) {
-  return (
-    <div>
-      {text}
-      <button onClick={resolve}>Okay</button>
-    </div>
-  );
-}
-
-function Cheese({ resolve }) {
-  return (
-    <div>
-      Yes or no?
-      <button onClick={() => resolve(true)}>Yes</button>
-      <button onClick={() => resolve(false)}>No</button>
-    </div>
-  );
-}
