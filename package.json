@@ -1,6 +1,17 @@
 {
   "name": "@hornbeck/react-modals",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Mads Hornbeck",
+    "email": "madshornbeck@gmail.com"
+  },
+  "keywords": [
+    "react",
+    "modal",
+    "dialog",
+    "promise"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "devDependencies": {
