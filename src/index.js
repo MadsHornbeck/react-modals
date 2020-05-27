@@ -1,20 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-import { ModalProvider } from "./modal";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ModalProvider portal={document.body}>
-      <App />
-    </ModalProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+import useAria from "./useAria";
+import useFocus from "./useFocus";
+import useCloseOnKeys from "./useCloseOnKeys";
+import { ModalProvider, useOpenModal } from "./ModalContext";
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+export { ModalProvider, useAria, useCloseOnKeys, useFocus, useOpenModal };
+
+export function useModal({ resolve, closeOnkeys, autoFocus }) {
+  const ref = React.useRef();
+  useFocus(ref, autoFocus);
+  useCloseOnKeys(resolve, closeOnkeys);
+  return ref;
+}

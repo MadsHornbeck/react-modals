@@ -1,5 +1,5 @@
 import React from "react";
-import { useOpenModal, useModal, useAria } from "./modal";
+import { useOpenModal, useModal, useAria } from "react-modal-promise";
 import "./Modal.css";
 
 const closeOnkeys = [
