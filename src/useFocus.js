@@ -1,6 +1,7 @@
 import React from "react";
-// TODO: handle parameters better
+
 export default function useFocus(ref, autoFocus = true) {
+  // TODO: investigate how returnfocus works with multiple modals
   const returnFocus = React.useRef(document.activeElement);
   React.useEffect(() => {
     if (autoFocus && ref.current) {

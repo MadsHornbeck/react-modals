@@ -5,11 +5,11 @@ import useFocus from "./useFocus";
 import useCloseOnKeys from "./useCloseOnKeys";
 import { ModalProvider, useOpenModal } from "./ModalContext";
 
-export { ModalProvider, useAria, useCloseOnKeys, useFocus, useOpenModal };
+export { ModalProvider, useAria, useOpenModal };
 
-export function useModal({ resolve, closeOnkeys, autoFocus }) {
+export function useModal({ resolve, closeOnKeys, autoFocus }) {
   const ref = React.useRef();
   useFocus(ref, autoFocus);
-  useCloseOnKeys(resolve, closeOnkeys);
+  useCloseOnKeys(resolve, closeOnKeys);
   return ref;
 }

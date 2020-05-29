@@ -1,7 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
-const ModalContext = React.createContext();
+const ModalContext = React.createContext(() => {
+  throw "useOpenModal used outside of modal context.\
+ Add ModalProvider to your component tree.";
+});
 ModalContext.displayName = "ModalContext";
 
 const scrollbarWidth = (function () {
@@ -16,7 +18,6 @@ const scrollbarWidth = (function () {
 })();
 
 export function useOpenModal(Component) {
-  // TODO: potential issues if passed component is changed after being added
   const dispatch = React.useContext(ModalContext);
   return React.useCallback(
     (props) => {
@@ -48,19 +49,26 @@ export function ModalProvider({ children, portal }) {
   // TODO: support multiple modals
   const modal = modals[modals.length - 1];
 
+  // TODO: Move this to it's own hook
   React.useEffect(() => {
     if (modal) {
+      const { body } = document;
+      const prevOverflow = body.style.overflow;
+      const prevPadding = body.style.paddingRight;
+
+      body.style.overflow = "hidden";
+      // TODO: add padding only if scrollbar is present
       const padding = Number(
-        window.getComputedStyle(document.body)["padding-right"].slice(0, -2)
+        window.getComputedStyle(body)["padding-right"].slice(0, -2)
       );
-      document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${padding + scrollbarWidth}px`;
+      body.style.paddingRight = `${padding + scrollbarWidth}px`;
       ref.current.setAttribute("aria-hidden", "true");
-    } else {
-      document.body.style.overflow = "auto";
-      // TODO: restore previous styles if any were set
-      document.body.style.paddingRight = "";
-      ref.current.removeAttribute("aria-hidden");
+
+      return () => {
+        body.style.overflow = prevOverflow;
+        body.style.paddingRight = prevPadding;
+        ref.current.removeAttribute("aria-hidden");
+      };
     }
   }, [modal]);
 
@@ -68,11 +76,7 @@ export function ModalProvider({ children, portal }) {
     <ModalContext.Provider value={dispatch}>
       {/** TODO: figure out if there is a better way of handling ref / aria-hidden */}
       <div ref={ref}>{children}</div>
-      {modal && <Portal portal={portal}>{modal}</Portal>}
+      {modal && (typeof portal === "function" ? portal(modal) : modal)}
     </ModalContext.Provider>
   );
-}
-
-function Portal({ portal, children }) {
-  return portal ? ReactDOM.createPortal(children, portal) : children;
 }

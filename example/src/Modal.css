@@ -1,4 +1,5 @@
 .modal {
+  display: flex;
   position: fixed;
   top: 0;
   left: 0;
@@ -18,15 +19,16 @@
 
 .content {
   position: relative;
-  top: 40%;
-  max-height: calc(40% - 10rem);
-  padding: 5rem;
-  background-color: white;
-  width: 20rem;
   margin: auto;
   overflow: auto;
+  max-height: 60vh; /* Setting a max-height of 100vh or less is recommended*/
+  /* Set the visual style for modal*/
+  background-color: white;
+  width: 20rem;
+  padding: 5rem;
 }
 
+/* Disables scrolling in content behind modal */
 [aria-hidden="true"] {
   overflow: hidden;
 }

@@ -6,6 +6,9 @@
     "name": "Mads Hornbeck",
     "email": "madshornbeck@gmail.com"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "react",
     "modal",
@@ -23,11 +26,11 @@
     "rollup-plugin-peer-deps-external": "2.2.2"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.8.0"
   },
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "start": "rollup -c -w"
   },
   "files": [
     "dist"

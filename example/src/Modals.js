@@ -1,8 +1,8 @@
 import React from "react";
-import { useOpenModal, useModal, useAria } from "react-modal-promise";
+import { useOpenModal, useModal, useAria } from "@hornbeck/react-modals";
 import "./Modal.css";
 
-const closeOnkeys = [
+const closeOnKeys = [
   "Escape",
   [
     "e",
@@ -17,11 +17,11 @@ const closeOnkeys = [
 ];
 
 function Modal({ children, handleClose, resolve, aria }) {
-  const ref = useModal({ resolve, closeOnkeys });
+  const ref = useModal({ resolve, closeOnKeys });
   return (
     <div className="modal">
       <div className="overlay" onClick={handleClose}></div>
-      <div className="content" ref={ref} role="dialog" {...aria.attributes}>
+      <div className="content" ref={ref} {...aria.attributes}>
         {children}
       </div>
     </div>
@@ -29,7 +29,7 @@ function Modal({ children, handleClose, resolve, aria }) {
 }
 
 function Alert({ resolve, text }) {
-  const aria = useAria("Label");
+  const aria = useAria("Alert");
   return (
     <Modal aria={aria} resolve={resolve} handleClose={() => resolve()}>
       <div style={{ height: "100vh" }}>
@@ -43,7 +43,7 @@ function Alert({ resolve, text }) {
 export const useAlert = (text) => useOpenModal(<Alert text={text} />);
 
 function Confirm({ resolve, text }) {
-  const aria = useAria("Label");
+  const aria = useAria("Confirm");
   return (
     <Modal aria={aria} resolve={resolve} handleClose={() => resolve(false)}>
       <p>{text}</p>
