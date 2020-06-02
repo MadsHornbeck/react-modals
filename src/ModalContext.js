@@ -62,12 +62,13 @@ export function ModalProvider({ children, portal }) {
         window.getComputedStyle(body)["padding-right"].slice(0, -2)
       );
       body.style.paddingRight = `${padding + scrollbarWidth}px`;
-      ref.current.setAttribute("aria-hidden", "true");
+      const wrapperRef = ref.current;
+      wrapperRef.setAttribute("aria-hidden", "true");
 
       return () => {
         body.style.overflow = prevOverflow;
         body.style.paddingRight = prevPadding;
-        ref.current.removeAttribute("aria-hidden");
+        wrapperRef.removeAttribute("aria-hidden");
       };
     }
   }, [modal]);
