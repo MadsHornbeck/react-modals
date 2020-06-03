@@ -18,12 +18,15 @@
   },
   "plugins": [
     "react",
-    "react-hooks"
+    "react-hooks",
+    "prettier"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "prettier/react"
   ],
   "rules": {
     "react/prop-types": 0
