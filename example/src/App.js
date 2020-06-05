@@ -18,9 +18,15 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <button onClick={alert}>Whoop</button>
-        <button onClick={asdf}>Asdf</button>
-        <button onClick={() => alert2({ text: "henning" })}>Qwer</button>
+        <button onClick={() => alert()}>Alert</button>
+        <button onClick={() => alert2()}>Another alert</button>
+        <button onClick={() => alert2({ text: "Overwrite text" })}>
+          Alert with text overwrite
+        </button>
+        <button onClick={() => confirm()}>Confirm</button>
+        <button onClick={asdf}>
+          Confirm with text overwrite and log of return
+        </button>
       </header>
     </div>
   );

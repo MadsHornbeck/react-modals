@@ -1,5 +1,5 @@
 import React from "react";
-import { useOpenModal, useModal, useAria } from "@hornbeck/react-modals";
+import { useModal } from "@hornbeck/react-modals";
 import "./Modal.css";
 
 const closeOnKeys = [
@@ -9,29 +9,31 @@ const closeOnKeys = [
     () => {
       console.log("Closing in 1 second");
       return new Promise((r) => {
-        setTimeout(() => r("FISK"), 1000);
+        setTimeout(() => r("Promise close"), 1000);
       });
     },
   ],
   ["q", true],
 ];
 
-function Modal({ children, handleClose, resolve, aria }) {
-  const ref = useModal({ resolve, closeOnKeys });
-  return (
-    <div className="modal">
-      <div className="overlay" onClick={handleClose}></div>
-      <div className="content" ref={ref} {...aria.attributes}>
-        {children}
-      </div>
+const Modal = React.forwardRef(({ children, handleClose, aria }, ref) => (
+  <div className="modal">
+    <div className="overlay" onClick={handleClose}></div>
+    <div className="content" ref={ref} {...aria.attributes}>
+      {children}
     </div>
-  );
-}
+  </div>
+));
+Modal.displayName = "Modal";
 
-function Alert({ resolve, text }) {
-  const aria = useAria("Alert");
+const Alert = React.forwardRef(({ resolve, text, aria }, ref) => {
   return (
-    <Modal aria={aria} resolve={resolve} handleClose={() => resolve()}>
+    <Modal
+      ref={ref}
+      aria={aria}
+      resolve={resolve}
+      handleClose={() => resolve()}
+    >
       <div style={{ height: "100vh" }}>
         <h3 id={aria.labelledby}>Title</h3>
         <p>{text}</p>
@@ -39,18 +41,30 @@ function Alert({ resolve, text }) {
       </div>
     </Modal>
   );
-}
-export const useAlert = (text) => useOpenModal(<Alert text={text} />);
+});
+Alert.displayName = "Alert";
 
-function Confirm({ resolve, text }) {
-  const aria = useAria("Confirm");
+export const useAlert = (text) =>
+  useModal(<Alert text={text} closeOnKeys={closeOnKeys} />);
+
+const Confirm = React.forwardRef(({ resolve, text, aria }, ref) => {
+  const openConfirm = useConfirm("Test");
   return (
-    <Modal aria={aria} resolve={resolve} handleClose={() => resolve(false)}>
+    <Modal
+      ref={ref}
+      aria={aria}
+      resolve={resolve}
+      handleClose={() => resolve(false)}
+    >
       <p>{text}</p>
       <button onClick={() => resolve(true)}>Okay</button>
+      <button onClick={() => openConfirm().then(console.log)}>
+        OpenConfirm
+      </button>
       <button onClick={() => resolve(false)}>Cancel</button>
     </Modal>
   );
-}
+});
+Confirm.displayName = "Confirm";
 
-export const useConfirm = (text) => useOpenModal(<Confirm text={text} />);
+export const useConfirm = (text) => useModal(<Confirm text={text} />);

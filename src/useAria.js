@@ -9,18 +9,16 @@ function prefixer(prefix, obj) {
 }
 
 export default function useAria(label) {
-  const aria = React.useMemo(
-    () => ({
+  return React.useMemo(() => {
+    const aria = {
       describedby: genId(),
       label,
       labelledby: genId(), // TODO: maybe omit this if label is set
       modal: true,
-    }),
-    [label]
-  );
-  const attributes = React.useMemo(
-    () => Object.assign(prefixer("aria", aria), { role: "dialog" }),
-    [aria]
-  );
-  return Object.assign(aria, { attributes });
+    };
+    const attributes = Object.assign(prefixer("aria", aria), {
+      role: "dialog",
+    });
+    return Object.assign(aria, { attributes });
+  }, [label]);
 }
