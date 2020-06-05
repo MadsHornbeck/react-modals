@@ -2,8 +2,6 @@
 
 - [`ModalProvider`](#ModalProvider)
 - [`useModal`](#useModal)
-- [`useAria`](#useAria)
-- [`useOpenModal`](#useOpenModal)
 
 ## `ModalProvider`
 
@@ -31,59 +29,34 @@ ReactDOM.render(
 
 ## `useModal`
 
-`useModal` should be used in your modal components.
-
-It does two things:
-
-- Automatically focuses the content of the modal, and returns focus to the previously focused element when it closes.
-- Enables the default keyboard binding for closing the modal: `"Escape"`.
-  - This can be configured with the `closeOnKeys` prop.
-
-### Parameters
-
-- `resolve`
-  - when `useOpenModal` is used a prop `resolve` is injected, pass this to `useModal`.
-    `resolve` is from the `Promise` for the modal. When this promise is resolved the modal will close and unmount.
-- `closeOnKeys` : `Array (string | [key, value])`
-  - default : `["Escape"]`
-  - If a `[key, value]` is passsed, the modal promise will be resolved with `value`.
-    - If `value` is a function it will be evaluated
-    - If `value` is a promise or a function that returns a promise the promise the modal will close only when that promise has been resolved or rejected
-
-### return
-
-- ref
-  - ref should be added to the content `div` of the modal
-
-## `useAria`
-
-`useAria` should be used in your modals to make them accessible to people using screen readers and the like.
-
-### Parameters
-
-- label
-
-### return
-
-aria object
-
-- `labelledBy`
-  - A pseudo-random string to be set as `id` on the header or similar.
-- `describedBy`
-  - A pseudo-random string to be set as `id` on a tag that describes the function of the modal, if possible.
-- `label`
-  - Labels the modal, is passed as a parameter to the hook.
-- `attributes`
-  - This key should be spread on the content `div` of the modal, it adds the aria-attributes needed.
-
-## `useOpenModal`
-
-This hook is used to open the modal you've passed as a prop. A function is returned that when invoked will open the modal. A promise is returned from this function that is resolved when the modal is closed.
+This hook is used to open the modal you've passed as a prop. A function is returned that when invoked will open the modal. A promise is returned from this function, which when resolved will close the modal.
 
 ### Parameters
 
 - Component
-  - Pass a component that uses the `useModal` hook.
+
+  - Pass a component that uses the `useModal` hook. This component needs to be using `React.forwardRef`.
+  - `closeOnKeys` : `Array (string | [key, value])`
+    - default : `["Escape"]`
+    - If a `[key, value]` is passsed, the modal promise will be resolved with `value`.
+      - If `value` is a function it will be evaluated
+      - If `value` is a promise or a function that returns a promise the promise the modal will close only when that promise has been resolved or rejected
+  - `ariaLabel` - label to allow you to control what screen readers see.
+
+### Injected props
+
+Several props are injected into the component passed to `useModal`.
+
+- `resolve` - is from the `Promise` for the modal. When this promise is resolved the modal will close and unmount.
+- `ref` - should be added to the HTML element of the modal content.
+  - This is used to automatically focus the content of the modal
+  - Focus is locked to the content of HTML element while the modal is open.
+  - Focus is returned to the previously focused element when the modal closes.
+- `aria`
+  - `attributes` - This key should be spread on the content `div` of the modal, it adds the aria-attributes needed to fulfill [aria requirements](https://www.w3.org/TR/wai-aria-practices/#dialog_modal).
+  - `labelledBy` - A pseudo-random string to be set as `id` on the header or similar.
+  - `describedBy` - A pseudo-random string to be set as `id` on a tag that describes the function of the modal, if possible.
+  - `label` - Labels the modal, is passed as a parameter to the hook.
 
 ### return
 

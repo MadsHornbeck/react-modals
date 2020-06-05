@@ -23,15 +23,36 @@ ReactDOM.render(
 ```js
 import { useModal } from "@hornbeck/react-modals";
 
-export function Modal({ children, resolve, aria }) {
-  const ref = useModal({ resolve });
-  const handleClose = () => resolve();
+const Modal = React.forwardRef(({ aria, children, handleClose }, ref) => {
   return (
     <div className="modal">
       <div className="overlay" onClick={handleClose}></div>
       <div className="content" ref={ref} {...aria.attributes}>
         {children}
       </div>
+    </div>
+  );
+});
+
+// To use the modal do the following
+// Example of a confirm modal
+
+const Confirm = React.forwardRef((props, ref) => (
+  <Modal ref={ref} aria={props.aria} handleClose={() => resolve(false)}>
+    <p>{props.text}</p>
+    <div>
+      <button onClick={() => props.resolve(true)}>Okay</button>
+      <button onClick={() => props.resolve(false)}>Cancel</button>
+    </div>
+  </Modal>
+));
+
+function App() {
+  const confirm = useModal(<Confirm text="Confirm this" />);
+
+  return (
+    <div>
+      <button onClick={() => confirm()}>Confirm</button>
     </div>
   );
 }
