@@ -7,9 +7,9 @@ import { ModalProvider, useOpenModal } from "./ModalContext";
 
 export { ModalProvider, useAria, useOpenModal };
 
-export function useModal({ resolve, closeOnKeys, autoFocus }) {
+export function useModal({ resolve, closeOnKeys }) {
   const ref = React.useRef();
-  useFocus(ref, autoFocus);
+  useFocus(ref);
   useCloseOnKeys(resolve, closeOnKeys);
   return ref;
 }
