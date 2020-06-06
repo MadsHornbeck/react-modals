@@ -27,8 +27,3 @@
   width: 20rem;
   padding: 5rem;
 }
-
-/* Disables scrolling in content behind modal */
-[aria-hidden="true"] {
-  overflow: hidden;
-}

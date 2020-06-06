@@ -1,32 +1,37 @@
 import React from "react";
 import "./App.css";
-import { useAlert, useConfirm } from "./Modals";
+import { useModal } from "@hornbeck/react-modals";
+import Alert from "./modals/Alert";
+import Confirm from "./modals/Confirm";
 
 function App() {
-  const alert = useAlert("This is an alert");
+  const alert = useModal(<Alert text="Santa is not real!" />);
 
-  const alert2 = useAlert("This is also an alert!");
+  const confirm = useModal(<Confirm text="Do you want to confirm this?" />);
 
-  const confirm = useConfirm("Do you want to confirm this?");
-  const asdf = () => {
-    confirm({ text: "This is a different text!" }).then(console.log);
+  const modalChain = async () => {
+    if (await confirm({ text: "Do you want to know a secret?" })) {
+      await alert();
+      if (
+        await confirm({
+          text: "Do you still want to send the letter?",
+        })
+      ) {
+        console.log("Letter has been sent");
+      }
+    }
   };
 
   return (
     <div className="App" style={{ height: "200vh" }}>
       <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button onClick={() => alert()}>Alert</button>
-        <button onClick={() => alert2()}>Another alert</button>
-        <button onClick={() => alert2({ text: "Overwrite text" })}>
+        <h1>@hornbeck/react-modals</h1>
+        <button onClick={alert}>Alert</button>
+        <button onClick={() => alert({ text: "Different text" })}>
           Alert with text overwrite
         </button>
-        <button onClick={() => confirm()}>Confirm</button>
-        <button onClick={asdf}>
-          Confirm with text overwrite and log of return
-        </button>
+        <button onClick={confirm}>Confirm</button>
+        <button onClick={modalChain}>Modal chain</button>
       </header>
     </div>
   );
