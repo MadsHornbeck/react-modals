@@ -6,7 +6,7 @@ export default function useFocus(ref) {
 
   React.useEffect(() => {
     if (ref.current) {
-      findTabable(ref.current).focus();
+      findFocusable(ref.current).focus();
     }
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -19,7 +19,7 @@ export default function useFocus(ref) {
     if (!ref.current) return;
     function handleFocus() {
       if (ref.current.contains(document.activeElement)) return;
-      findTabable(ref.current, isShiftKeyDown).focus();
+      findFocusable(ref.current, isShiftKeyDown).focus();
     }
     document.addEventListener("focus", handleFocus, true);
     return () => {
@@ -28,7 +28,7 @@ export default function useFocus(ref) {
   }, [isShiftKeyDown, ref]);
 }
 
-function findTabable(element, findLast = false) {
+function findFocusable(element, findLast = false) {
   const focusable = Array.from(
     element.querySelectorAll(
       "[tabindex],button,input,select,textarea,object,a[href]"
@@ -51,11 +51,11 @@ function useShiftKey() {
         setIsShift(false);
       }
     };
-    window.addEventListener("keydown", keyDown);
-    window.addEventListener("keyup", keyUp);
+    document.addEventListener("keydown", keyDown);
+    document.addEventListener("keyup", keyUp);
     return () => {
-      window.removeEventListener("keydown", keyDown);
-      window.removeEventListener("keyup", keyUp);
+      document.removeEventListener("keydown", keyDown);
+      document.removeEventListener("keyup", keyUp);
     };
   }, []);
   return isShift;

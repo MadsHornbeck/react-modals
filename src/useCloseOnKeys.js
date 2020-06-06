@@ -16,4 +16,6 @@ export default function useCloseOnKeys(resolve, keys = ["Escape"]) {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [keys, resolve]);
+
+  React.useDebugValue(keys);
 }

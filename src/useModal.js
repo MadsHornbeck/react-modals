@@ -8,13 +8,13 @@ export default function useModal(component) {
   const dispatch = React.useContext(ModalContext);
   return React.useCallback(
     (props) => {
+      // Naive way of detecting events, might need to be refined.
+      const p = props?.nativeEvent ? undefined : props;
       let modal;
       return new Promise((resolve) => {
-        // TODO: maybe find a better name for resolve
-        modal = React.createElement(Modal, { props, resolve, component });
+        modal = React.createElement(Modal, { props: p, resolve, component });
         dispatch({ type: "add", modal });
       }).finally(() => {
-        // TODO: make sure there isn't a memory leak related to the resolve function
         dispatch({ type: "remove", modal });
       });
     },
@@ -23,11 +23,22 @@ export default function useModal(component) {
 }
 
 function Modal({ component, props = {}, resolve }) {
-  const ariaLabel = component.props.ariaLabel || props.ariaLabel;
-  const closeOnKeys = component.props.closeOnKeys || props.closeOnKeys;
+  const ariaLabel = props.ariaLabel || component.props.ariaLabel;
+  const [closeOnKeys, setCloseOnKeys] = React.useState(
+    props.closeOnKeys ||
+      component.props.closeOnKeys ||
+      component.type.closeOnKeys ||
+      component.type.render.closeOnKeys
+  );
   const ref = React.useRef();
   const aria = useAria(ariaLabel);
   useCloseOnKeys(resolve, closeOnKeys);
   useFocus(ref);
-  return React.cloneElement(component, { ...props, aria, resolve, ref });
+  return React.cloneElement(component, {
+    ...props,
+    aria,
+    ref,
+    resolve,
+    setCloseOnKeys,
+  });
 }

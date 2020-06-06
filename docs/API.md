@@ -38,9 +38,7 @@ This hook is used to open the modal you've passed as a prop. A function is retur
   - Pass a component that uses the `useModal` hook. This component needs to be using `React.forwardRef`.
   - `closeOnKeys` : `Array (string | [key, value])`
     - default : `["Escape"]`
-    - If a `[key, value]` is passsed, the modal promise will be resolved with `value`.
-      - If `value` is a function it will be evaluated
-      - If `value` is a promise or a function that returns a promise the promise the modal will close only when that promise has been resolved or rejected
+    - [Read more about `closeOnKeys` here.](./closeOnKeys.md)
   - `ariaLabel` - label to allow you to control what screen readers see.
 
 ### Injected props
@@ -57,8 +55,17 @@ Several props are injected into the component passed to `useModal`.
   - `labelledBy` - A pseudo-random string to be set as `id` on the header or similar.
   - `describedBy` - A pseudo-random string to be set as `id` on a tag that describes the function of the modal, if possible.
   - `label` - Labels the modal, is passed as a parameter to the hook.
+- `setCloseOnKeys` - allows you to set the `closeOnKeys` from within your modal component.
 
 ### return
 
 - props => Promise
   - props passed here will overwrite any previously passed props
+  - The function can be used directly in render and wont cause unnecessary rerenders.
+    - The event will _not_ be passed as props.
+
+```js
+const openModal = useModal(<Modal />);
+
+<button onClick={openModal}>Open modal</button>;
+```
