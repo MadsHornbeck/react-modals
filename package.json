@@ -1,6 +1,6 @@
 {
   "name": "@hornbeck/react-modals",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "license": "MIT",
   "author": {
     "name": "Mads Hornbeck",
@@ -21,7 +21,7 @@
   ],
   "main": "dist/index.js",
   "module": "dist/index.es.js",
-  "sideEffect": false,
+  "sideEffects": false,
   "devDependencies": {
     "@babel/core": "7.10.0",
     "@babel/preset-env": "7.10.0",
