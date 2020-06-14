@@ -30,6 +30,7 @@ export default function ModalProvider({ children, portal }) {
         window.getComputedStyle(body)["padding-right"].slice(0, -2)
       );
       body.style.paddingRight = `${padding + scrollbarWidth}px`;
+      // TODO: figure out if there is a better way of handling ref / aria-hidden
       const wrapperRef = ref.current;
       wrapperRef.setAttribute("aria-hidden", "true");
 
@@ -41,12 +42,11 @@ export default function ModalProvider({ children, portal }) {
     }
   }, [modal]);
 
-  return (
-    <ModalContext.Provider value={dispatch}>
-      {/** TODO: figure out if there is a better way of handling ref / aria-hidden */}
-      <div ref={ref}>{children}</div>
-      {modal && (typeof portal === "function" ? portal(modal) : modal)}
-    </ModalContext.Provider>
+  return React.createElement(
+    ModalContext.Provider,
+    { value: dispatch },
+    React.createElement("div", { ref }, children),
+    modal && (typeof portal === "function" ? portal(modal) : modal)
   );
 }
 

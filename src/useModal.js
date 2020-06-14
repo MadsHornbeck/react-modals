@@ -9,7 +9,7 @@ export default function useModal(component) {
   return React.useCallback(
     (props) => {
       // Naive way of detecting events, might need to be refined.
-      const p = props?.nativeEvent ? undefined : props;
+      const p = props && props.nativeEvent ? undefined : props;
       let modal;
       return new Promise((resolve) => {
         modal = React.createElement(Modal, { props: p, resolve, component });
