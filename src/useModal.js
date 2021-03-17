@@ -7,12 +7,12 @@ import useCloseOnKeys from "./useCloseOnKeys";
 export default function useModal(component) {
   const dispatch = React.useContext(ModalContext);
   return React.useCallback(
-    (props) => {
+    (e) => {
       // Naive way of detecting events, might need to be refined.
-      const p = props && props.nativeEvent ? undefined : props;
+      const props = e && e.nativeEvent ? undefined : e;
       let modal;
       return new Promise((resolve) => {
-        modal = React.createElement(Modal, { props: p, resolve, component });
+        modal = React.createElement(Modal, { component, props, resolve });
         dispatch({ type: "add", modal });
       }).finally(() => {
         dispatch({ type: "remove", modal });

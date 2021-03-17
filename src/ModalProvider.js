@@ -1,4 +1,6 @@
 import React from "react";
+
+import { scrollbarWidth } from "./util";
 import ModalContext from "./ModalContext";
 
 export default function ModalProvider({ children, portal }) {
@@ -49,14 +51,3 @@ export default function ModalProvider({ children, portal }) {
     modal && (typeof portal === "function" ? portal(modal) : modal)
   );
 }
-
-const scrollbarWidth = (function () {
-  const el = document.createElement("div");
-  el.style.position = "absolute";
-  el.style.top = "-9999px";
-  el.style.overflow = "scroll";
-  document.body.appendChild(el);
-  const width = el.offsetWidth;
-  document.body.removeChild(el);
-  return width;
-})();

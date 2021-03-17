@@ -10,10 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hornbeck/react-modals": "file:..",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-scripts": "3.4.1",
-    "@hornbeck/react-modals": "file:.."
+    "react-scripts": "3.4.1"
   },
   "browserslist": {
     "production": [
