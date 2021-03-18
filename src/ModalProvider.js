@@ -1,6 +1,6 @@
 import React from "react";
 
-import { scrollbarWidth } from "./util";
+import { scrollLock } from "./util";
 import ModalContext from "./ModalContext";
 
 export default function ModalProvider({ children, portal }) {
@@ -19,29 +19,8 @@ export default function ModalProvider({ children, portal }) {
   // TODO: support multiple modals
   const modal = modals[modals.length - 1];
 
-  // TODO: Maybe move this to it's own hook
   React.useEffect(() => {
-    if (modal) {
-      const { body } = document;
-      const prevOverflow = body.style.overflow;
-      const prevPadding = body.style.paddingRight;
-
-      body.style.overflow = "hidden";
-      // TODO: add padding only if scrollbar is present
-      const padding = Number(
-        window.getComputedStyle(body)["padding-right"].slice(0, -2)
-      );
-      body.style.paddingRight = `${padding + scrollbarWidth}px`;
-      // TODO: figure out if there is a better way of handling ref / aria-hidden
-      const wrapperRef = ref.current;
-      wrapperRef.setAttribute("aria-hidden", "true");
-
-      return () => {
-        body.style.overflow = prevOverflow;
-        body.style.paddingRight = prevPadding;
-        wrapperRef.removeAttribute("aria-hidden");
-      };
-    }
+    if (modal) return scrollLock(ref.current);
   }, [modal]);
 
   return React.createElement(
