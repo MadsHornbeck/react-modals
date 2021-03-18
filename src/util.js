@@ -6,20 +6,10 @@ export function prefixer(prefix, obj) {
 
 export const genId = () => Math.random().toString(36).slice(2);
 
-const scrollbarWidth = (function () {
-  const el = document.createElement("div");
-  el.style.position = "absolute";
-  el.style.top = "-9999px";
-  el.style.overflow = "scroll";
-  document.body.appendChild(el);
-  const width = el.offsetWidth;
-  document.body.removeChild(el);
-  return width;
-})();
-
 export function scrollLock(targetToHide) {
   targetToHide.setAttribute("aria-hidden", "true");
   const scrollTop = window.pageYOffset;
+  const scrollbarWidth = getScrollbarWidth();
   const style = {
     overflow: "hidden",
     position: "fixed",
@@ -41,4 +31,18 @@ function setHtmlStyle(style) {
     html.style[k] = v;
     return a;
   }, {});
+}
+
+let scrollbarWidth;
+function getScrollbarWidth() {
+  if (scrollbarWidth !== void 0) return scrollbarWidth;
+  const el = document.createElement("div");
+  el.style.position = "absolute";
+  el.style.top = "-9999px";
+  el.style.overflow = "scroll";
+  document.body.appendChild(el);
+  const width = el.offsetWidth;
+  document.body.removeChild(el);
+  scrollbarWidth = width;
+  return width;
 }

@@ -16,10 +16,11 @@ export default function useFocus(ref) {
 
   React.useEffect(() => {
     // TODO: log warning if ref.current is undefined.
-    if (!ref.current) return;
+    const el = ref.current;
+    if (!el) return;
     function handleFocus() {
-      if (ref.current.contains(document.activeElement)) return;
-      findFocusable(ref.current, isShiftKeyDown).focus();
+      if (el.contains(document.activeElement)) return;
+      findFocusable(el, isShiftKeyDown).focus();
     }
     document.addEventListener("focus", handleFocus, true);
     return () => {
