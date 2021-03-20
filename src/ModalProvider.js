@@ -1,6 +1,6 @@
 import React from "react";
+import { useScrollLock } from "@hornbeck/scroll-lock";
 
-import { scrollLock } from "./util";
 import ModalContext from "./ModalContext";
 
 export default function ModalProvider({ children, portal, ...props }) {
@@ -19,8 +19,16 @@ export default function ModalProvider({ children, portal, ...props }) {
   // TODO: support multiple modals
   const modal = modals[modals.length - 1];
 
+  useScrollLock(modal);
+
   React.useEffect(() => {
-    if (modal) return scrollLock(ref.current);
+    if (modal) {
+      const el = ref.current;
+      el.setAttribute("aria-hidden", "true");
+      return () => {
+        el.removeAttribute("aria-hidden");
+      };
+    }
   }, [modal]);
 
   return React.createElement(
