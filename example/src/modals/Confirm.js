@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "./Modal";
+import { Modal } from "@hornbeck/react-modals";
 
 function Confirm({ text, resolve, aria }, ref) {
   const handleClose = () => resolve(false);

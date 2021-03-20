@@ -8,9 +8,9 @@ export default function useFocus(ref) {
     if (ref.current) {
       findFocusable(ref.current).focus();
     }
+    const rf = returnFocus.current;
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      if (returnFocus.current) returnFocus.current.focus();
+      if (rf) rf.focus();
     };
   }, [ref]);
 

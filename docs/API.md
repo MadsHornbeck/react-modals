@@ -2,6 +2,7 @@
 
 - [`ModalProvider`](#ModalProvider)
 - [`useModal`](#useModal)
+- [`Modal`](#Modal)
 
 ## `ModalProvider`
 
@@ -65,7 +66,22 @@ Several props are injected into the component passed to `useModal`.
     - The event will _not_ be passed as props.
 
 ```js
-const openModal = useModal(<Modal />);
+const openExampleModal = useModal(<ExampleModal />);
 
-<button onClick={openModal}>Open modal</button>;
+<button onClick={openExampleModal}>Open modal</button>;
 ```
+
+## `Modal`
+
+This component is the base for all of your modals. It defines the structure for
+the overlay and the content of your modals.
+
+### props
+
+- aria
+- children
+- className
+- handleClose
+- overlayClass
+- style
+- ref

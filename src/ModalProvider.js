@@ -3,7 +3,7 @@ import React from "react";
 import { scrollLock } from "./util";
 import ModalContext from "./ModalContext";
 
-export default function ModalProvider({ children, portal }) {
+export default function ModalProvider({ children, portal, ...props }) {
   const ref = React.useRef();
   const [modals, dispatch] = React.useReducer((state, action) => {
     switch (action.type) {
@@ -26,7 +26,7 @@ export default function ModalProvider({ children, portal }) {
   return React.createElement(
     ModalContext.Provider,
     { value: dispatch },
-    React.createElement("div", { ref }, children),
+    React.createElement("div", { ...props, ref }, children),
     modal && (typeof portal === "function" ? portal(modal) : modal)
   );
 }

@@ -2,8 +2,9 @@
 
 `npm install --save @hornbeck/react-modals`
 
-- add ModalProvider
-- add modal
+- Add ModalProvider
+- Add modal
+- Using your modals
 
 ## Add `ModalProvider`
 
@@ -18,25 +19,26 @@ ReactDOM.render(
 );
 ```
 
-## Add modal component
+## Add modal
 
 ```js
-import { useModal } from "@hornbeck/react-modals";
+import { Modal, useModal } from "@hornbeck/react-modals";
 
-const Modal = React.forwardRef(({ aria, children, handleClose }, ref) => {
+// Example of an alert modal
+
+const Alert = React.forwardRef(({ aria, children, resolve, text }, ref) => {
+  const handleClose = () => resolve();
   return (
-    <div className="modal">
-      <div className="overlay" onClick={handleClose}></div>
-      <div className="content" ref={ref} {...aria.attributes}>
-        {children}
-      </div>
-    </div>
+    <Modal ref={ref} aria={aria} handleClose={handleClose}>
+      <p>{text}</p>
+      <button onClick={handleClose}></button>
+    </Modal>
   );
 });
 
-// To use the modal do the following
-// Example of a confirm modal
+const useAlert = (text) => useModal(<Alert text={text} />);
 
+// Example of a confirm modal
 const Confirm = React.forwardRef((props, ref) => (
   <Modal ref={ref} aria={props.aria} handleClose={() => resolve(false)}>
     <p>{props.text}</p>
@@ -47,54 +49,48 @@ const Confirm = React.forwardRef((props, ref) => (
   </Modal>
 ));
 
+const useConfirm = (text) => useModal(<Confirm text={text} />);
+```
+
+You can add `className` or `overlayClass` if you need to style the modal content
+container or the overlay.
+Alternatively you can just add style targeting `.modal-overlay` and `.modal-content`.
+
+No style is added except for the required ones, so the default is going to look
+a bit odd.
+Add the following for a base styling that should be relatively simple to extend
+or change:
+
+```css
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: white;
+  width: 20rem;
+  max-height: 60vh;
+  padding: 5rem;
+}
+```
+
+### Custom Modal component
+
+It's also possible to create your own custom component instead of using the one
+provided by `@hornbeck/react-modals`. If there is interest in a more detailed
+description of how this is done
+[open an issue on github](https://github.com/MadsHornbeck/react-modals/issues).
+
+## Using your modals
+
+```js
 function App() {
-  const confirm = useModal(<Confirm text="Confirm this" />);
+  const alert = useAlert();
 
   return (
     <div>
-      <button onClick={() => confirm()}>Confirm</button>
+      <button type="button" onClick={alert}></button>
     </div>
   );
 }
 ```
-
-## Add styling
-
-```css
-.modal {
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-}
-
-.content {
-  position: relative;
-  margin: auto;
-  overflow: auto;
-  max-height: 60vh; /* Setting a max-height of 100vh or less is recommended */
-  /* Set the visual style for modal*/
-  background-color: white;
-  width: 20rem;
-  padding: 5rem;
-}
-
-/* Disables scrolling in content behind modal */
-[aria-hidden="true"] {
-  overflow: hidden;
-}
-```
-
-These are just examples and can be configured and changed as wanted.
