@@ -6,6 +6,7 @@ import Confirm from "./modals/Confirm";
 
 function App() {
   const alert = useModal(<Alert text="Santa is not real!" />);
+  const alert2 = useModal(Alert);
 
   const confirm = useModal(<Confirm text="Do you want to confirm this?" />);
 
@@ -27,6 +28,9 @@ function App() {
       <header className="App-header">
         <h1>@hornbeck/react-modals</h1>
         <button onClick={alert}>Alert</button>
+        <button onClick={() => alert2({ text: "Alternative alert" })}>
+          Alert2
+        </button>
         <button onClick={() => alert({ text: "Different text" })}>
           Alert with text overwrite
         </button>

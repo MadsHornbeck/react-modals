@@ -1,8 +1,7 @@
 import React from "react";
+
 import ModalContext from "./ModalContext";
-import useFocus from "./useFocus";
-import useAria from "./useAria";
-import useCloseOnKeys from "./useCloseOnKeys";
+import Modal from "./Modal";
 
 export default function useModal(component) {
   const dispatch = React.useContext(ModalContext);
@@ -12,7 +11,7 @@ export default function useModal(component) {
       const props = e && e.nativeEvent ? undefined : e;
       let modal;
       return new Promise((resolve) => {
-        modal = React.createElement(Modal, { component, props, resolve });
+        modal = React.createElement(Modal, { props, resolve }, component);
         dispatch({ type: "add", modal });
       }).finally(() => {
         dispatch({ type: "remove", modal });
@@ -20,25 +19,4 @@ export default function useModal(component) {
     },
     [component, dispatch]
   );
-}
-
-function Modal({ component, props = {}, resolve }) {
-  const ariaLabel = props.ariaLabel || component.props.ariaLabel;
-  const [closeOnKeys, setCloseOnKeys] = React.useState(
-    props.closeOnKeys ||
-      component.props.closeOnKeys ||
-      component.type.closeOnKeys ||
-      component.type.render.closeOnKeys
-  );
-  const ref = React.useRef();
-  const aria = useAria(ariaLabel);
-  useCloseOnKeys(resolve, closeOnKeys);
-  useFocus(ref);
-  return React.cloneElement(component, {
-    ...props,
-    aria,
-    ref,
-    resolve,
-    setCloseOnKeys,
-  });
 }

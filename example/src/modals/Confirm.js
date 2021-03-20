@@ -1,16 +1,15 @@
 import React from "react";
-import { Modal } from "@hornbeck/react-modals";
 
-function Confirm({ text, resolve, aria }, ref) {
-  const handleClose = () => resolve(false);
+function Confirm({ text, resolve }, ref) {
   return (
-    <Modal ref={ref} handleClose={handleClose} aria={aria}>
-      <p>{text}</p>
+    <>
+      <p ref={ref}>{text}</p>
       <button onClick={() => resolve(true)}>Okay</button>
       <button onClick={() => resolve(false)}>Cancel</button>
-    </Modal>
+    </>
   );
 }
 Confirm.closeOnKeys = [["Escape", false]];
+Confirm.overlayClose = (resolve) => resolve(false);
 
-export default React.forwardRef(Confirm);
+export default React.memo(React.forwardRef(Confirm));

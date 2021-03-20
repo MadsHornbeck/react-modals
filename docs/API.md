@@ -27,6 +27,7 @@ ReactDOM.render(
   - default: modals are appended after children in DOM tree
   - pass a function to set a portal if needed e.g.
   - `modal => ReactDOM.createPortal(modal, document.body)`
+- any additional props are passed to the div element
 
 ## `useModal`
 
@@ -41,27 +42,28 @@ This hook is used to open the modal you've passed as a prop. A function is retur
     - default : `["Escape"]`
     - [Read more about `closeOnKeys` here.](./closeOnKeys.md)
   - `ariaLabel` - label to allow you to control what screen readers see.
+  - `overlayClass` - class that is added to the overlay
+  - `modalClass` - class that is added to the modal content
 
 ### Injected props
 
 Several props are injected into the component passed to `useModal`.
 
 - `resolve` - is from the `Promise` for the modal. When this promise is resolved the modal will close and unmount.
-- `ref` - should be added to the HTML element of the modal content.
-  - This is used to automatically focus the content of the modal
-  - Focus is locked to the content of HTML element while the modal is open.
-  - Focus is returned to the previously focused element when the modal closes.
 - `aria`
   - `attributes` - This key should be spread on the content `div` of the modal, it adds the aria-attributes needed to fulfill [aria requirements](https://www.w3.org/TR/wai-aria-practices/#dialog_modal).
   - `labelledBy` - A pseudo-random string to be set as `id` on the header or similar.
   - `describedBy` - A pseudo-random string to be set as `id` on a tag that describes the function of the modal, if possible.
   - `label` - Labels the modal, is passed as a parameter to the hook.
 - `setCloseOnKeys` - allows you to set the `closeOnKeys` from within your modal component.
+- `setOverlayClose` - allows you to set the `overlayClose` from within your modal component.
+
+Any props passed to as part of opening the modal is also passed directly to the modal component. These will overwrite any previously passed props with the same name.
 
 ### return
 
 - props => Promise
-  - props passed here will overwrite any previously passed props
+  - props passed here will overwrite any previously passed props with the same name
   - The function can be used directly in render and wont cause unnecessary rerenders.
     - The event will _not_ be passed as props.
 
@@ -71,17 +73,13 @@ const openExampleModal = useModal(<ExampleModal />);
 <button onClick={openExampleModal}>Open modal</button>;
 ```
 
-## `Modal`
+## Static props on modals
 
-This component is the base for all of your modals. It defines the structure for
-the overlay and the content of your modals.
+Modals allow for two different static props.
 
-### props
-
-- aria
-- children
-- className
-- handleClose
-- overlayClass
-- style
-- ref
+- `closeOnKeys`
+  - default: `["Escape"]`
+  - [Read more about `closeOnKeys` here.](./closeOnKeys.md)
+- `overlayClose` - A function that is invoked when the modal overlay is clicked,
+  the resolve prop is passed to it and if resolve is invoked the modal will close.
+  - default: `resolve => resolve()`

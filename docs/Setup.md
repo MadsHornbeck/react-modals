@@ -29,37 +29,47 @@ import { Modal, useModal } from "@hornbeck/react-modals";
 const Alert = React.forwardRef(({ aria, children, resolve, text }, ref) => {
   const handleClose = () => resolve();
   return (
-    <Modal ref={ref} aria={aria} handleClose={handleClose}>
+    <>
       <p>{text}</p>
       <button onClick={handleClose}></button>
-    </Modal>
+    </>
   );
 });
 
-const useAlert = (text) => useModal(<Alert text={text} />);
+export const useAlert = (text) => useModal(<Alert text={text} />);
+
+const alert = useAlert("Hello, world!");
+alert();
+// can also overwrite props passed like so:
+alert({ text: "Goodbye, world!" });
+
+// Alternatively use like this directly in component
+const alert = useModal(Alert);
+alert({ text: "Hello, world!" });
 
 // Example of a confirm modal
 const Confirm = React.forwardRef((props, ref) => (
-  <Modal ref={ref} aria={props.aria} handleClose={() => resolve(false)}>
+  <>
     <p>{props.text}</p>
     <div>
       <button onClick={() => props.resolve(true)}>Okay</button>
       <button onClick={() => props.resolve(false)}>Cancel</button>
     </div>
-  </Modal>
+  </>
 ));
+Confirm.overlayClose = (resolve) => resolve(false);
 
 const useConfirm = (text) => useModal(<Confirm text={text} />);
 ```
 
-You can add `className` or `overlayClass` if you need to style the modal content
+You can add `modalClass` or `overlayClass` if you need to style the modal content
 container or the overlay.
 Alternatively you can just add style targeting `.modal-overlay` and `.modal-content`.
 
 No style is added except for the required ones, so the default is going to look
 a bit odd.
-Add the following for a base styling that should be relatively simple to extend
-or change:
+Add the following for a base styling that should make it look slightly better.
+It should be relatively simple to extend or change to fit your needs:
 
 ```css
 .modal-overlay {

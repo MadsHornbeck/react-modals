@@ -46,3 +46,13 @@ function getScrollbarWidth() {
   scrollbarWidth = width;
   return width;
 }
+
+export function getStatic(c, t) {
+  return (
+    (c.props && c.props[t]) ||
+    c[t] ||
+    (c.type && c.type[t]) ||
+    (c.type && c.type.render && c.type.render[t]) ||
+    (c.type && c.type.type && (c.type.type[t] || c.type.type.render[t]))
+  );
+}

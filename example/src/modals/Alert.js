@@ -1,14 +1,14 @@
 import React from "react";
-import { Modal } from "@hornbeck/react-modals";
 
-function Alert({ text, resolve, aria }, ref) {
+function Alert({ text, resolve, aria }) {
   const handleClose = () => resolve();
   return (
-    <Modal ref={ref} aria={aria} handleClose={handleClose}>
-      <p>{text}</p>
+    <>
+      <p id={aria.labelledBy}>{text}</p>
       <button onClick={handleClose}>Okay</button>
-    </Modal>
+    </>
   );
 }
+Alert.overlayClose = (resolve) => resolve();
 
-export default React.forwardRef(Alert);
+export default Alert;

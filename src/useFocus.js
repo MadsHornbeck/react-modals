@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function useFocus(ref) {
+export default function useFocus() {
+  const ref = React.useRef();
   const returnFocus = React.useRef(document.activeElement);
   const isShiftKeyDown = useShiftKey();
 

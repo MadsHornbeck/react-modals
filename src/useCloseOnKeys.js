@@ -1,6 +1,12 @@
 import React from "react";
 
-export default function useCloseOnKeys(resolve, keys = ["Escape"]) {
+import { getStatic } from "./util";
+
+export default function useCloseOnKeys({ children, props, resolve }) {
+  const [keys, setCloseOnKeys] = React.useState(
+    props.closeOnKeys || getStatic(children, "closeOnKeys") || ["Escape"]
+  );
+
   React.useEffect(() => {
     function handleKeyDown(e) {
       const match = keys.find((k) => k === e.key || k[0] === e.key);
@@ -18,4 +24,6 @@ export default function useCloseOnKeys(resolve, keys = ["Escape"]) {
   }, [keys, resolve]);
 
   React.useDebugValue(keys);
+
+  return setCloseOnKeys;
 }
