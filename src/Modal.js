@@ -6,19 +6,16 @@ import useCloseOnKeys from "./useCloseOnKeys";
 import useFocus from "./useFocus";
 import { getStatic } from "./util";
 
-function Modal({ children, style, resolve, props = {} }) {
-  const ariaLabel =
-    props.ariaLabel || (children.props && children.props.ariaLabel);
+function Modal({ children, resolve, props = {} }) {
+  const { ariaLabel, overlayClass = "", modalClass = "" } = props;
   const aria = useAria(ariaLabel);
-  const setCloseOnKeys = useCloseOnKeys({ children, props, resolve });
   const ref = useFocus();
+  const setCloseOnKeys = useCloseOnKeys({ children, props, resolve });
 
   const [overlayClose, setOverlayClose] = React.useState(
     () =>
       props.overlayClose || getStatic(children, "overlayClose") || ((r) => r())
   );
-
-  const { overlayClass = "", modalClass = "" } = props;
 
   const childProps = {
     ...props,
@@ -27,6 +24,7 @@ function Modal({ children, style, resolve, props = {} }) {
     setCloseOnKeys,
     setOverlayClose,
   };
+
   return React.createElement(
     "div",
     { className: "modal" },
@@ -38,7 +36,6 @@ function Modal({ children, style, resolve, props = {} }) {
       "div",
       {
         className: `modal-content ${modalClass}`,
-        style,
         ref,
         ...aria.attributes,
       },

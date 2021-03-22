@@ -8,6 +8,10 @@ export default function useCloseOnKeys({ children, props, resolve }) {
   );
 
   React.useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
     function handleKeyDown(e) {
       const match = keys.find((k) => k === e.key || k[0] === e.key);
       if (match) {
@@ -16,11 +20,6 @@ export default function useCloseOnKeys({ children, props, resolve }) {
         resolve(typeof value === "function" ? value() : value);
       }
     }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
   }, [keys, resolve]);
 
   React.useDebugValue(keys);
