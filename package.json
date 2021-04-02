@@ -1,6 +1,6 @@
 {
   "name": "@hornbeck/react-modals",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "license": "MIT",
   "author": {
     "name": "Mads Hornbeck",
@@ -19,8 +19,11 @@
     "dialog",
     "promise"
   ],
-  "module": "src/index.js",
-  "sideEffects": false,
+  "main": "index.js",
+  "style": "index.css",
+  "sideEffects": [
+    "*.css"
+  ],
   "dependencies": {
     "@hornbeck/scroll-lock": "1.0.3"
   },
@@ -28,6 +31,7 @@
     "react": "^16.8.0"
   },
   "files": [
+    "index",
     "src"
   ]
 }

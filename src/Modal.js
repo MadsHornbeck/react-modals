@@ -1,6 +1,5 @@
 import React from "react";
 
-import "./Modal.css";
 import useAria from "./useAria";
 import useCloseOnKeys from "./useCloseOnKeys";
 import useFocus from "./useFocus";
