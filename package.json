@@ -1,6 +1,6 @@
 {
   "name": "@hornbeck/react-modals",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "license": "MIT",
   "author": {
     "name": "Mads Hornbeck",
@@ -19,7 +19,8 @@
     "dialog",
     "promise"
   ],
-  "main": "index.js",
+  "main": "index.cjs",
+  "module": "src/index.js",
   "style": "index.css",
   "sideEffects": [
     "*.css"
