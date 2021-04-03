@@ -1,4 +1,2 @@
-import ModalProvider from "./ModalProvider";
-import useModal from "./useModal";
-
-export { ModalProvider, useModal };
+export { default as ModalProvider } from "./ModalProvider";
+export { default as useModal } from "./useModal";
