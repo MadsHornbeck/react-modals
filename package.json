@@ -1,6 +1,6 @@
 {
   "name": "@hornbeck/react-modals",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "license": "MIT",
   "author": {
     "name": "Mads Hornbeck",
@@ -29,7 +29,7 @@
     "@hornbeck/scroll-lock": "1.0.5"
   },
   "peerDependencies": {
-    "react": "^16.8.0"
+    "react": ">=16.8.0"
   },
   "files": [
     "index.cjs",
