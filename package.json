@@ -26,7 +26,7 @@
     "*.css"
   ],
   "dependencies": {
-    "@hornbeck/scroll-lock": "1.0.5"
+    "@hornbeck/scroll-lock": "1.0.6"
   },
   "peerDependencies": {
     "react": ">=16.8.0"
