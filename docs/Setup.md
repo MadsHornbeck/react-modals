@@ -4,7 +4,7 @@
 
 - Add ModalProvider
 - Add modal
-- Using your modals
+- Start using your modals
 
 ## Add `ModalProvider`
 
@@ -19,10 +19,10 @@ ReactDOM.render(
 );
 ```
 
-## Add modal
+## Create modals
 
 ```js
-import { Modal, useModal } from "@hornbeck/react-modals";
+import { useModal } from "@hornbeck/react-modals";
 
 // Example of an alert modal
 
@@ -38,6 +38,7 @@ const Alert = React.forwardRef(({ aria, children, resolve, text }, ref) => {
 
 export const useAlert = (text) => useModal(<Alert text={text} />);
 
+// In component
 const alert = useAlert("Hello, world!");
 alert();
 // can also overwrite props passed like so:
@@ -57,6 +58,7 @@ const Confirm = React.forwardRef((props, ref) => (
     </div>
   </>
 ));
+Confirm.closeOnKeys = [["Escape", false]];
 Confirm.overlayClose = (resolve) => resolve(false);
 
 const useConfirm = (text) => useModal(<Confirm text={text} />);
@@ -72,6 +74,10 @@ Add the following for a base styling that should make it look slightly better.
 It should be relatively simple to extend or change to fit your needs:
 
 ```css
+.modal {
+  z-index: 100;
+}
+
 .modal-overlay {
   background-color: rgba(0, 0, 0, 0.4);
 }
@@ -84,13 +90,6 @@ It should be relatively simple to extend or change to fit your needs:
 }
 ```
 
-### Custom Modal component
-
-It's also possible to create your own custom component instead of using the one
-provided by `@hornbeck/react-modals`. If there is interest in a more detailed
-description of how this is done
-[open an issue on github](https://github.com/MadsHornbeck/react-modals/issues).
-
 ## Using your modals
 
 ```js
@@ -102,5 +101,17 @@ function App() {
       <button type="button" onClick={alert}></button>
     </div>
   );
+}
+
+// OR
+
+function App() {
+  const confirm = useConfirm();
+
+  async function confirmThenFetch() {
+    if (await confirm("Can we fetch data?")) {
+      const data = await fetch();
+    }
+  }
 }
 ```

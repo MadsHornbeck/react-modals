@@ -1,9 +1,10 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import { useScrollLock } from "@hornbeck/scroll-lock";
 
 import ModalContext from "./ModalContext";
 
-export default function ModalProvider({ children, portal, ...props }) {
+export default function ModalProvider({ children, portal }) {
   const ref = React.useRef();
   const [modals, dispatch] = React.useReducer((state, action) => {
     switch (action.type) {
@@ -34,7 +35,18 @@ export default function ModalProvider({ children, portal, ...props }) {
   return React.createElement(
     ModalContext.Provider,
     { value: dispatch },
-    React.createElement("div", { ...props, ref }, children),
-    modal && (typeof portal === "function" ? portal(modal) : modal)
+    children,
+    !ref.current &&
+      React.createElement("div", {
+        ref: (r) => {
+          if (!ref.current) ref.current = r;
+          else ref.current = ref.current.parentNode;
+        },
+        style: { display: "none" },
+      }),
+    modal &&
+      (typeof portal === "function"
+        ? portal(modal)
+        : ReactDOM.createPortal(modal, document.body))
   );
 }

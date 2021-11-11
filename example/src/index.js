@@ -7,7 +7,7 @@ import { ModalProvider } from "@hornbeck/react-modals";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ModalProvider portal={(m) => ReactDOM.createPortal(m, document.body)}>
+    <ModalProvider>
       <App />
     </ModalProvider>
   </React.StrictMode>,

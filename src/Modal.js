@@ -6,8 +6,8 @@ import useFocus from "./useFocus";
 import { getStatic } from "./util";
 
 function Modal({ children, resolve, props = {} }) {
-  const { ariaLabel, overlayClass = "", modalClass = "" } = props;
-  const aria = useAria(ariaLabel);
+  const { overlayClass = "", modalClass = "" } = props;
+  const [aria, ariaAttrs] = useAria(props["aria-label"]);
   const ref = useFocus();
   const setCloseOnKeys = useCloseOnKeys({ children, props, resolve });
 
@@ -36,7 +36,7 @@ function Modal({ children, resolve, props = {} }) {
       {
         className: `modal-content ${modalClass}`,
         ref,
-        ...aria.attributes,
+        ...ariaAttrs,
       },
       typeof children === "function"
         ? children(childProps)
